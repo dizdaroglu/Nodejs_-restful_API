@@ -21,7 +21,10 @@ var FoodSchema = new Schema({
             enum: ['available', 'unavailable']
         }],
         default: ['available']
-    }
+    },
+    imageUrl: {
+        type:String
+    },
 });
 // a setter
 FoodSchema.path('name').set( (inputString) => {

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 let Food = require('../models/FoodModel');
+let fs = require('fs');
 
 router.get('/list_all_foods', (request, response, next) => {
     //response.end("GET requested => list_all_foods");
@@ -76,7 +77,8 @@ router.get('/list_foods_with_criteria',(request,response,next)=>{
 router.post('/insert_new_food', (request, response, next) => {
     const newFood = new Food({
         name: request.body.name,
-        foodDescription: request.body.foodDescription
+        foodDescription: request.body.foodDescription,
+        imageUrl:request.body.imageUrl
     });
     newFood.save((err) => {
         if (err) {
@@ -91,13 +93,73 @@ router.post('/insert_new_food', (request, response, next) => {
                 data: {
                     name: request.body.name,
                     foodDescription: request.body.foodDescription,
+                    imageUrl:request.body.imageUrl,
                     messege: "Insert new food successfully"
                 }
             });
         }
     });
 });
-
+router.post('/upload_images', (request, response, next) => {
+    let formidable = require('formidable');
+    // parse a file upload
+    var form = new formidable.IncomingForm();
+    form.uploadDir = "./uploads";
+    form.keepExtensions = true;
+    form.maxFieldsSize = 10 * 1024 * 1024; //10 MB
+    form.multiples = true;
+    form.parse(request, (err, fields, files) => {
+        if (err) {
+            response.json({
+                result: "failed",
+                data: {},
+                messege: `Cannot upload images.Error is : ${err}`
+            });
+        }
+        
+        var arrayOfFiles = [];
+        if(files[""] instanceof Array) {
+            arrayOfFiles = files[""];
+        } else {
+            arrayOfFiles.push(files[""]);
+        }
+        
+        if (arrayOfFiles.length > 0) {
+            var fileNames = [];
+            arrayOfFiles.forEach((eachFile)=> {
+                 //fileNames.push(eachFile.path)
+                fileNames.push(eachFile.path.split('\\')[1]);
+            });
+            response.json({
+                result: "ok",
+                data: fileNames,
+                numberOfImages: fileNames.length,
+                messege: "Upload images successfully"
+            });
+        } else {
+            response.json({
+                result: "failed",
+                data: {},
+                numberOfImages: 0,
+                messege: "No images to upload !"
+            });
+        }
+    });
+});
+router.get('/open_image', (request, response, next) => {
+    let imageName = "uploads/" + request.query.image_name;
+    fs.readFile(imageName, (err, imageData) => {
+        if (err) {
+            response.json({
+                result: "failed",
+                messege: `Cannot read image.Error is : ${err}`
+            });
+            return;
+        }
+        response.writeHead(200, {'Content-Type': 'image/jpeg'});
+        response.end(imageData); // Send the file data to the browser.
+    });
+});
 router.put('/update_a_food', (request, response, next) => {
     response.end("PUT requested => update_a_food");
 });
