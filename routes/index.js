@@ -1,8 +1,12 @@
+global.router = require('express').Router();
+var router = global.router;
 
- router = require('./food');
+router = require('./food');
+router = require('./category');
+
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/', (request, response, next) => {
+    response.render('index', {title: 'My tutorial videos'});
 });
 
 
