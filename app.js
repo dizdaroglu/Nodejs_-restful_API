@@ -14,8 +14,8 @@ var mongoose = require('mongoose');
 let options = {
   db: { native_parser: true },
   server: { poolSize: 5 },
-  user: 'dizdaroglu',                // mlab.com > user !!!
-  pass: 'fd113685'                 // mlab.com > user !!!
+  user: '',                // mlab.com > user !!!
+  pass: ''                 // mlab.com > user !!!
 }
 //use native promises
 mongoose.Promise = global.Promise;
