@@ -7,20 +7,13 @@ var MovieSchema = new Schema({
         type: String,
         required: true
     },
-    MovieDescription: {
+    releaseYear: {
         type: String,
         default: ""
     },
     created_date: {
         type: Date,
         default: Date.now
-    },
-    status: {
-        type: [{
-            type: String,
-            enum: ['available', 'unavailable']
-        }],
-        default: ['available']
     },
     imageUrl: {
         type: String

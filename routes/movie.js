@@ -6,7 +6,7 @@ let fs = require('fs');
 router.post('/insert_new_movie', (request, response, next) => {
     const newMovie = new Movie({
         name: request.body.name,
-        MovieDescription: request.body.MovieDescription
+        releaseYear: request.body.releaseYear
     });
     newMovie.save((err) => {
 
@@ -21,7 +21,7 @@ router.post('/insert_new_movie', (request, response, next) => {
                 result: "ok",
                 data: {
                     name: request.body.name,
-                    MovieDescription: request.body.MovieDescription,
+                    releaseYear: request.body.releaseYear,
                     messege: "Insert new movie successfully",
                 }
             });
@@ -31,9 +31,7 @@ router.post('/insert_new_movie', (request, response, next) => {
 router.get('/movies', (request, response, next) => {
     Movie.find({}).limit(100).sort({ name: 1 }).select({
         name: 1,
-        MovieDescription: 1,
-        created_date: 1,
-        status: 1
+        releaseYear: 1
     }).exec((err, movie) => {
         if (err) {
             response.json({
