@@ -12,18 +12,18 @@ var app = express();
 //connect DB;
 var mongoose = require('mongoose');
 let options = {
-  db:{native_parser:true},
-  server:{poolSize:5},
-  user:'',                // mlab.com > user !!!
-  pass:''                 // mlab.com > user !!!
+  db: { native_parser: true },
+  server: { poolSize: 5 },
+  user: '',                // mlab.com > user !!!
+  pass: ''                 // mlab.com > user !!!
 }
 //use native promises
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://<user>:<pass>@ds022228.mlab.com:22228/rook',options).then( //user = mlab.com > user
-  ()=>{                                                                               //pass = mlab.com > pass
+mongoose.connect('mongodb://<user>:<pass>@ds022228.mlab.com:22228/rook', options).then( //user = mlab.com > user
+  () => {                                                                               //pass = mlab.com > pass
     console.log("conncet db basarılı")
   },
-  err=>{
+  err => {
     console.log('connect basarısız')
   }
 )
@@ -42,12 +42,12 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
